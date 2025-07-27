@@ -220,7 +220,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     
     // Execute reCAPTCHA v3
     grecaptcha.ready(function() {
-        grecaptcha.execute('YOUR_SITE_KEY', { action: 'submit' })
+        grecaptcha.execute('6LfKZpArAAAAAN93faqI2DAUWYU_MNxhTLuqZCeQ', { action: 'submit' })
             .then(function(token) {
                 // Add token to form data
                 const form = e.target;
@@ -233,7 +233,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
                 submitButton.disabled = true;
                 
                 // Submit to Google Apps Script
-                fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+                fetch('https://script.google.com/macros/s/AKfycbwOTogNutAvamJmmXk7yeCmoPFmYssNM0ShQq6I6G7LjmYysl0351ZIjeT-pUiUGGlS/exec', {
                     method: 'POST',
                     body: formData
                 })
