@@ -211,3 +211,46 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Rest of your existing JavaScript...
 });
+
+
+
+// added for captcha JavaScript...
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Execute reCAPTCHA v3
+    grecaptcha.ready(function() {
+        grecaptcha.execute('YOUR_SITE_KEY', { action: 'submit' })
+            .then(function(token) {
+                // Add token to form data
+                const form = e.target;
+                const formData = new FormData(form);
+                formData.append('g-recaptcha-response', token);
+                
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonText = submitButton.textContent;
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+                
+                // Submit to Google Apps Script
+                fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        form.reset();
+                        submitButton.textContent = 'Message Sent! ✅';
+                        // Optional: Show success message
+                    } else {
+                        throw new Error('Failed to send');
+                    }
+                })
+                .catch(error => {
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                    alert('Error: ' + error.message);
+                });
+            });
+    });
+});
