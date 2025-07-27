@@ -43,6 +43,9 @@
     
     <!-- Favicon (Optional but Recommended) -->
     <link rel="icon" href="assets/images/favicon.png" type="image/x-icon">
+    
+    <!-- Added reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -75,7 +78,7 @@
         <div class="hero-content">
             <br>
             <h4 class="subtitle fade-in">Hello,</h4>
-            <h1 class="logo"> I’m MD Aaqif Hussain</h1>
+            <h1 class="logo"> I'm MD Aaqif Hussain</h1>
             <h3 class="subtitle fade-in">Aspiring Business Analyst</h3>
             <p class="description fade-in">Currently pursuing an MBA in Business Analytics, I specialize in uncovering trends, building predictive models, and delivering actionable intelligence through data storytelling and visualization.</p>
             <div class="hero-btns fade-in">
@@ -455,6 +458,11 @@
         <div class="form-group">
             <textarea name="message" placeholder="Your Message" required></textarea>
         </div>
+        
+        <!-- Added reCAPTCHA widget -->
+        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+        <br>
+        
         <button type="submit" class="btn btn-primary">Send Message</button>
     </div>
     <div id="formResponse" style="display:none;"></div>
@@ -463,8 +471,18 @@
 <script>
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    // Verify reCAPTCHA first
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (!recaptchaResponse) {
+        alert("Please complete the reCAPTCHA verification");
+        return;
+    }
+    
     const form = e.target;
     const formData = new FormData(form);
+    formData.append('g-recaptcha-response', recaptchaResponse); // Add reCAPTCHA to form data
+    
     const submitButton = form.querySelector('button[type="submit"]');
     const originalButtonText = submitButton.textContent;
     
@@ -480,6 +498,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         if (response.ok) {
             // Success: Show thank-you message
             form.reset(); // Clear the form
+            grecaptcha.reset(); // Reset reCAPTCHA
             submitButton.textContent = 'Message Sent! ✅';
             
             // Optional: Hide form and show a bigger success message
