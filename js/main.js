@@ -2,18 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile Navigation
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    const body = document.body;
     
     hamburger.addEventListener('click', function() {
         this.classList.toggle('active');
         navLinks.classList.toggle('active');
-        
-        // Toggle body scroll when menu is open
-        if (navLinks.classList.contains('active')) {
-            body.style.overflow = 'hidden';
-        } else {
-            body.style.overflow = '';
-        }
     });
     
     // Close mobile menu when clicking on a nav link
@@ -21,23 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navLinks.classList.remove('active');
-            body.style.overflow = '';
         });
     });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const isClickInsideNav = navLinks.contains(event.target) || hamburger.contains(event.target);
-        
-        if (!isClickInsideNav && navLinks.classList.contains('active')) {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            body.style.overflow = '';
-        }
-    });
-    
-    // Rest of your existing JavaScript code...
-});
     
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
