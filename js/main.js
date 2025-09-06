@@ -152,13 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // added for the email form (done with online hosting)
 
 
-    // Initialize particles.js
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS.load('particles-js', 'js/particles.json', function() {
-            console.log('Particles.js loaded');
-        });
-    }
-});
+
 
 // Update active nav link on click and scroll
 document.querySelectorAll('.nav-link').forEach(link => {
