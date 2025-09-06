@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+   // --- REPLACE THIS SECTION IN YOUR FILE ---
+
     // Mobile Navigation
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
@@ -6,6 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     hamburger.addEventListener('click', function() {
         this.classList.toggle('active');
         navLinks.classList.toggle('active');
+
+        // Prevent page scrolling when menu is open
+        if (navLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
     
     // Close mobile menu when clicking on a nav link
@@ -13,8 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navLinks.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
         });
     });
+
+// --- END OF SECTION TO REPLACE ---
     
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -182,32 +194,3 @@ window.addEventListener('scroll', function() {
 });
 
 
-// for mobile view
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Navigation
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        
-        // Toggle body scroll when menu is open
-        if (navLinks.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    });
-    
-    // Close mobile menu when clicking on a nav link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    });
-    
-    // Rest of your existing JavaScript...
-});
