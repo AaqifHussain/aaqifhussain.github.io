@@ -1370,3 +1370,34 @@ section {
     width: 100%;
 }
 
+/* Mobile styles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px; /* adjust text size */
+        padding: 10px;   /* reduce padding/margins */
+    }
+
+    header, nav, main, footer {
+        width: 100%;
+        display: block;  /* stack elements vertically */
+    }
+
+    img, video {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    /* Example for text blocks */
+    h1, h2, h3, p {
+        text-align: center; /* optional */
+    }
+
+    /* Add any other elements that need adjustment */
+}
+
+
