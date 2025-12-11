@@ -1400,4 +1400,47 @@ section {
     /* Add any other elements that need adjustment */
 }
 
+/* Fix for mobile menu positioning */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 0;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 70px; /* Adjust based on your navbar height */
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: rgba(10, 25, 47, 0.98);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 50px;
+        gap: 30px;
+        transition: all 0.5s ease;
+        z-index: 999;
+        backdrop-filter: blur(10px);
+    }
+    
+    .nav-links.active {
+        left: 0;
+    }
+    
+    .hamburger {
+        display: flex;
+        z-index: 1000;
+    }
+    
+    /* Ensure hamburger is visible on mobile */
+    .hamburger .line {
+        background-color: var(--primary-color);
+    }
+    
+    /* When menu is open, change hamburger lines color */
+    .hamburger.active .line {
+        background-color: var(--primary-color);
+    }
+}
+
 
