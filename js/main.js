@@ -1,32 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
    // --- REPLACE THIS SECTION IN YOUR FILE ---
 
-    // Mobile Navigation
+    
+
+document.addEventListener("DOMContentLoaded", () => {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
+    const links = document.querySelectorAll('.nav-link');
+
+    if (!hamburger || !navLinks) return; // Prevent breaking if elements missing
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
         navLinks.classList.toggle('active');
 
-        // Prevent page scrolling when menu is open
-        if (navLinks.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        // Lock scroll when menu open
+        document.body.style.overflow = navLinks.classList.contains('active')
+            ? 'hidden'
+            : '';
     });
-    
-    // Close mobile menu when clicking on a nav link
-    document.querySelectorAll('.nav-link').forEach(link => {
+
+    // Close menu on link click
+    links.forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navLinks.classList.remove('active');
-            document.body.style.overflow = ''; // Re-enable scrolling
+            document.body.style.overflow = '';
         });
     });
+});
 
-// --- END OF SECTION TO REPLACE ---
     
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
