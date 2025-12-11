@@ -1,53 +1,144 @@
 document.addEventListener('DOMContentLoaded', function() {
    // --- REPLACE THIS SECTION IN YOUR FILE ---
 
-    
-
-document.addEventListener("DOMContentLoaded", () => {
+   // Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Navigation
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    const links = document.querySelectorAll('.nav-link');
-
-    if (!hamburger || !navLinks) return; // Prevent breaking if elements missing
-
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-
-        // Lock scroll when menu open
-        document.body.style.overflow = navLinks.classList.contains('active')
-            ? 'hidden'
-            : '';
-    });
-
-    // Close menu on link click
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    });
-});
-
     
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+
+            // Prevent page scrolling when menu is open
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+    }
+    
+    // Close mobile menu when clicking on a nav link
+    const navLinkElements = document.querySelectorAll('.nav-link');
+    navLinkElements.forEach(link => {
+        link.addEventListener('click', () => {
+            if (hamburger && navLinks) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = ''; // Re-enable scrolling
             }
         });
     });
     
+    // Also close mobile menu when clicking on the download CV button (it has btn-primary class)
+    const downloadBtn = document.querySelector('.nav-links .btn-primary');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            if (hamburger && navLinks) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+    
+    // Add scroll event to add/remove active class from nav links based on section
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            if (pageYOffset >= (sectionTop - 100)) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+    
+    // Back to top button functionality
+    const backToTopBtn = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', function() {
+        if (backToTopBtn) {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        }
+    });
+    
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    
+    // Animate skill bars on scroll
+    const skillBars = document.querySelectorAll('.skill-progress');
+    
+    function animateSkillBars() {
+        skillBars.forEach(skill => {
+            const width = skill.getAttribute('data-width');
+            skill.style.width = width;
+        });
+    }
+    
+    // Initialize skill bars animation
+    animateSkillBars();
+    
+    // Project filtering
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            const filterValue = this.getAttribute('data-filter');
+            
+            projectCards.forEach(card => {
+                const categories = card.getAttribute('data-category').split(' ');
+                
+                if (filterValue === 'all' || categories.includes(filterValue)) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+    });
+});
+
     // Navbar scroll effect
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
