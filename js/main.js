@@ -1,18 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
    // --- REPLACE THIS SECTION IN YOUR FILE ---
 
-   // Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Navigation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Navigation Toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+    const navLinkElements = document.querySelectorAll('.nav-link');
+    const downloadBtn = document.querySelector('.nav-links .btn-primary');
     
+    // Toggle mobile menu
     if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
             this.classList.toggle('active');
             navLinks.classList.toggle('active');
-
-            // Prevent page scrolling when menu is open
+            
+            // Prevent body scroll when menu is open
             if (navLinks.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
             } else {
@@ -21,20 +24,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close mobile menu when clicking on a nav link
-    const navLinkElements = document.querySelectorAll('.nav-link');
+    // Close menu when clicking on nav links
     navLinkElements.forEach(link => {
         link.addEventListener('click', () => {
             if (hamburger && navLinks) {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
-                document.body.style.overflow = ''; // Re-enable scrolling
+                document.body.style.overflow = '';
             }
         });
     });
     
-    // Also close mobile menu when clicking on the download CV button (it has btn-primary class)
-    const downloadBtn = document.querySelector('.nav-links .btn-primary');
+    // Close menu when clicking download button
     if (downloadBtn) {
         downloadBtn.addEventListener('click', () => {
             if (hamburger && navLinks) {
@@ -45,28 +46,65 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Add scroll event to add/remove active class from nav links based on section
-    window.addEventListener('scroll', function() {
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (pageYOffset >= (sectionTop - 100)) {
-                current = section.getAttribute('id');
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (navLinks && navLinks.classList.contains('active')) {
+            if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
             }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
+        }
     });
+    
+    // Update active nav link on scroll
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        
+        document.querySelectorAll('section[id]').forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                navLinkElements.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+        
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+    
+    // Back to top button
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
+        
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+});
     
     // Back to top button functionality
     const backToTopBtn = document.querySelector('.back-to-top');
@@ -139,23 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-    // Navbar scroll effect
-    window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-        
-        // Back to top button
-        const backToTop = document.querySelector('.back-to-top');
-        if (window.scrollY > 300) {
-            backToTop.classList.add('active');
-        } else {
-            backToTop.classList.remove('active');
-        }
-    });
+    
     
     // Project filtering
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -246,39 +268,5 @@ document.addEventListener('DOMContentLoaded', function() {
 // added for the email form (done with online hosting)
 
 
-
-
-// Update active nav link on click and scroll
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', function() {
-        // Remove active class from all links
-        document.querySelectorAll('.nav-link').forEach(el => {
-            el.classList.remove('active');
-        });
-        
-        // Add active class to clicked link
-        this.classList.add('active');
-    });
-});
-
-// Update active nav link on scroll
-window.addEventListener('scroll', function() {
-    const scrollPosition = window.scrollY;
-    
-    document.querySelectorAll('section').forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-        
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    });
-});
 
 
